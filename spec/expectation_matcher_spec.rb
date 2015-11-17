@@ -93,7 +93,48 @@ describe 'Expectation Matcher' do
 			expect(b).to be <= f
 			expect(f).to be > d
 			expect(f).to be >= d
+			expect(1).to be_between(1,5).inclusive
+			expect(6).to be_between(1,7).exclusive
+			expect(5).not_to be_between(6,19)
+			expect(100).to  be_within(10).of(110)
+			expect(1..6).not_to cover(7)
+			expect(1..3).to cover(2)
 		end
+	end
+
+	context 'Other useful matcher' do 
+		it "return a value of regular expression" do
+			s = 'lnd38'
+			e = '123'
+			b = 344
+			expect(s).to match(/[a-zA-Z0-9]/)
+			expect(e).to match(/\d{3}/)
+			expect(b).not_to match(/\d{3}/)
+		end
+		it "return a value of object type" do
+			class Person
+				attr_accessor :name
+			end
+            p = Person.new
+            p.name = 'kaky'
+
+			@num = 5
+			a = 'kaky'
+			expect(a).to be_an_instance_of(String)
+            expect(p).to have_attributes(:name => 'kaky')
+            expect(@num).to satisfy {|v| v < 9 && v.odd?}
+            expect(a).to repond_to(:length)
+            expect(3).to satisfy do |x| 
+               x.odd? && x.integer? || x.nonzero?
+            end
+
+		end
+	end
+	context 'observation macher' do
+		it "return a value" do
+		a = 4
+		expect(a << 1).to change(a, :empty?).from(true).to(false)
+	end
 	end
 
 end
